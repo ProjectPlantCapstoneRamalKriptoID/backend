@@ -60,7 +60,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // For testing only
 app.get('/', (_req, res) => {
-  res.send('RamalKripto API');
+  res.send('Ramal Kripto API');
 });
 
 module.exports = app;
