@@ -2,17 +2,31 @@
   "name": "ramal-kripto",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "Mochammad Syahrul Kurniawan",
   "license": "ISC",
   "dependencies": {
+    "argon2": "^0.43.0",
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
-    "express": "^5.1.0"
+    "env-encryption": "^1.11.0",
+    "express": "^5.1.0",
+    "express-session": "^1.18.1",
+    "googleapis": "^149.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.16.0",
+    "mongoose": "^8.15.0",
+    "path": "^0.12.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "uuid": "^11.1.0",
+    "validator": "^13.15.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
