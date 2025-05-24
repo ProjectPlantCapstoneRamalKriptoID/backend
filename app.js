@@ -5,13 +5,11 @@ const session = require('express-session');
 const swaggerConfig = require('./src/configs/swagger');
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-const dotenv = require('dotenv');
+
+require('dotenv').config();
 
 // Create app
 const app = express();
-
-// Config dotenv
-dotenv.config();
 
 // Config swagger
 const swaggerDocs = swaggerJSDoc(swaggerConfig);
