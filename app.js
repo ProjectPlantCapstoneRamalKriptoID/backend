@@ -1,10 +1,10 @@
 const cors = require('cors');
-const express = require('express');
 const path = require('path');
+const express = require('express');
 const session = require('express-session');
-const swaggerConfig = require('./src/configs/swagger');
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const swaggerConfig = require('./src/configs/swagger.config');
 
 require('dotenv').config();
 
@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   cors({
-    origin: ['http://localhost:3000'],
+    origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: [
       'Origin',
