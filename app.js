@@ -56,7 +56,7 @@ app.use((req, res, next) => {
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Call routes
-// require('./src/routes/user.routes')(app);
+require('./src/routes/authentication.routes')(app);
 
 // For testing only
 app.get('/', (_req, res) => {
