@@ -2,7 +2,7 @@
  * @swagger
  * components:
  *   schemas:
- *     Auth:
+ *     Authentication:
  *       type: object
  *       required:
  *         - email
@@ -10,8 +10,33 @@
  *       properties:
  *         email:
  *           type: string
- *           format: email
  *         password:
  *           type: string
- *           format: password
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - name
+ *         - email
+ *         - password
+ *       properties:
+ *         id:
+ *           type: string
+ *         name:
+ *           type: string
+ *         email:
+ *           type: string
+ *         password:
+ *           type: string
+ *         verified:
+ *           type: boolean
+ *         createdAt:
+ *           type: date-time
+ *         updatedAt:
+ *           type: date-time
  */

@@ -1,17 +1,15 @@
 const cors = require('cors');
-const express = require('express');
 const path = require('path');
+const express = require('express');
 const session = require('express-session');
-const swaggerConfig = require('./src/configs/swagger');
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-const dotenv = require('dotenv');
+const swaggerConfig = require('./src/configs/swagger.config');
+
+require('dotenv').config();
 
 // Create app
 const app = express();
-
-// Config dotenv
-dotenv.config();
 
 // Config swagger
 const swaggerDocs = swaggerJSDoc(swaggerConfig);
@@ -22,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   cors({
-    origin: ['http://localhost:3000'],
+    origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: [
       'Origin',
@@ -62,7 +60,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // For testing only
 app.get('/', (_req, res) => {
-  res.send('RamalKripto API');
+  res.send('Ramal Kripto API');
 });
 
 module.exports = app;

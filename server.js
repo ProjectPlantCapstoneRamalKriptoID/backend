@@ -1,8 +1,7 @@
 const app = require('./app.js');
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
 
-dotenv.config();
+require('dotenv').config();
 
 // Database config
 const db = {

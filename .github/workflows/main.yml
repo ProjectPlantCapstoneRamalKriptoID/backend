@@ -1,0 +1,57 @@
+name: RAMAL-KRIPTO CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+env:
+  MONGODB_URI: ${{ secrets.DB_CLOUD_URI }}
+  NODE_ENV: ${{ secrets.NODE_ENV }}
+  PORT: 8000
+  AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.X'
+          cache: 'npm'
+
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.8.0
+        with:
+          mongodb-version: '7.0.7'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Intall env-secrets
+        run: npm install env-encryption
+
+      - name: Decrypt env-secrets
+        run: npx env-encryption decrypt --key ${{secrets.ENV_KEY}} --filename .env
+
+  deploy:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Deploy to production
+        run: |
+          echo "Deployment step - add your deployment commands here"
