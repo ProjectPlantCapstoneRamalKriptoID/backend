@@ -3,7 +3,7 @@ const user = require('../controllers/user.controller');
 const { authentication } = require('../middleware/authentication.middleware');
 const { upload } = require('../configs/cloudinary.config');
 
-// Get user profile
+// Get profile
 /**
  * @swagger
  * /user/profile:
@@ -30,7 +30,7 @@ router.get('/profile', authentication(), (req, res) => {
   user.getProfile(req, res);
 });
 
-// Update user profile
+// Update profile
 /**
  * @swagger
  * /user/profile-update:
@@ -85,11 +85,41 @@ router.put(
   }
 );
 
-//   // Delete user account
-//   router.delete(
-//     '/profile',
-//     authenticationMiddleware,
-//     userController.deleteAccount
-//   );
+// Delete photo profile
+/**
+ * @swagger
+ * /user/profile-delete:
+ *   delete:
+ *     tags:
+ *       - User
+ *     summary: Delete user profile photo
+ *     parameters:
+ *       - in: query
+ *         name: public_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Use public_id of the photo to delete (e.g., profileImages/abc123)
+ *     responses:
+ *       200:
+ *         description: Successfully deleted profile photo
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Profile image deleted successfully
+ *                 data:
+ *                   $ref: '#/components/schemas/User'
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal Server Error
+ */
+router.delete('/profile-delete', authentication(), (req, res) => {
+  user.deletePhotoProfile(req, res);
+});
 
 module.exports = router;
