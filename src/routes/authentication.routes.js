@@ -5,15 +5,15 @@ module.exports = (app) => {
   const validation = require('../middleware/validation.middleware');
 
   // Register account for user
-  router.post('/signup', validation, authentication.register);
+  router.post('/signup', validation, authentication.signup);
 
   // Email verification for user register account
-  // router.get('/verify-email/:uniqueString', authentication.verifyEmail);
+  router.get('/verify-email/:uniqueString', authentication.verifyEmail);
 
   // // Login account
-  // router.post('/signin', (req, res) => {
-  //   authentication.login(req, res);
-  // });
+  router.post('/signin', (req, res) => {
+    authentication.signin(req, res);
+  });
 
   // // Google Auth
   // router.get('/google', authentication.googleAuthRedirect);
