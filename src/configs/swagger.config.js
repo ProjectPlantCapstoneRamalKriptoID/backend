@@ -1,5 +1,4 @@
 const schema = require('../swagger/shema.swagger');
-const path = require('path');
 
 const swaggerConfig = {
   swaggerDefinition: {
@@ -7,11 +6,16 @@ const swaggerConfig = {
     info: {
       title: 'API Documentation',
       version: '1.0.0',
-      description: 'Ramal Kripto',
+      description: 'Ramal Kripto API Documentation',
     },
     servers: [
       {
         url: 'http://localhost:8000',
+        description: 'Development',
+      },
+      {
+        url: 'https://dicoding-capstone-backend.vercel.app',
+        description: 'Production',
       },
     ],
     components: {
@@ -22,15 +26,10 @@ const swaggerConfig = {
           bearerFormat: 'JWT',
         },
       },
-      schemas: {
-        components: schema.components,
-      },
+      schemas: schema,
     },
   },
-  apis: [
-    path.resolve(__dirname, '../routes/*.js'),
-    path.resolve(__dirname, '../swagger/*.js'),
-  ],
+  apis: ['./src/swagger/*.js', './src/routes/*.js'],
 };
 
 module.exports = swaggerConfig;
