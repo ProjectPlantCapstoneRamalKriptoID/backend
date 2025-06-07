@@ -18,12 +18,25 @@
  *           type: string
  *         password:
  *           type: string
+ *         profileImages:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               url:
+ *                 type: string
+ *               filename:
+ *                 type: string
+ *               public_id:
+ *                 type: string
  *         verified:
  *           type: boolean
  *         createdAt:
- *           type: date-time
+ *           type: string
+ *           format: date-time
  *         updatedAt:
- *           type: date-time
+ *           type: string
+ *           format: date-time
  */
 
 /**

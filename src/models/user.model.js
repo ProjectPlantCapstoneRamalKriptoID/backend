@@ -5,6 +5,13 @@ const userSchema = new mongoose.Schema(
     name: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
+    profileImages: [
+      {
+        url: { type: String, required: true },
+        filename: { type: String, required: true },
+        public_id: { type: String, required: true },
+      },
+    ],
     verified: { type: Boolean, default: false },
   },
   {
