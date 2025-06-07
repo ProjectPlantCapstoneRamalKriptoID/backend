@@ -32,7 +32,6 @@
     "nodemailer": "^7.0.3",
     "path": "^0.12.7",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1",
     "uuid": "^11.1.0",
     "validator": "^13.15.0"
   },
