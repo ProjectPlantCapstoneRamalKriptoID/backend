@@ -2,6 +2,8 @@ const cors = require('cors');
 const path = require('path');
 const express = require('express');
 const session = require('express-session');
+const authRoutes = require('./src/routes/authentication.routes');
+const userRoutes = require('./src/routes/user.routes');
 const swaggerRoutes = require('./src/routes/swagger.routes');
 
 require('dotenv').config();
@@ -47,14 +49,14 @@ app.use((req, res, next) => {
   next();
 });
 
-// Call routes
-require('./src/routes/authentication.routes')(app);
-require('./src/routes/user.routes')(app);
-
 // For testing only
 app.get('/', (_req, res) => {
   res.send('Ramal Kripto API');
 });
+
+// Call routes
+app.use('/auth', authRoutes);
+app.use('/user', userRoutes);
 
 // Swagger
 app.use(swaggerRoutes);
