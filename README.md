@@ -47,4 +47,4 @@ After configuring the environment variables, you can run the application by foll
   ```
 
 - Access API Documentation
-  [http://localhost:8000/api-docs/#/](http://localhost:8000/api-docs/#/)
+  [http://localhost:8000/api-docs/#/](http://localhost:8000/api-docs/#/) or [https://dicoding-capstone-backend.vercel.app/api-docs/#/](https://dicoding-capstone-backend.vercel.app/api-docs/#/)
