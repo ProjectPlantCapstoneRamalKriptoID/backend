@@ -118,7 +118,7 @@ router.put(
  *       500:
  *         description: Internal Server Error
  */
-router.delete('/profile-delete', authentication(), (req, res) => {
+router.delete('/photo-delete', authentication(), (req, res) => {
   user.deletePhotoProfile(req, res);
 });
 
