@@ -88,7 +88,7 @@ router.put(
 // Delete photo profile
 /**
  * @swagger
- * /user/profile-delete:
+ * /user/photo-delete:
  *   delete:
  *     tags:
  *       - User
