@@ -2,17 +2,12 @@ const cors = require('cors');
 const path = require('path');
 const express = require('express');
 const session = require('express-session');
-const swaggerJSDoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
-const swaggerConfig = require('./src/configs/swagger.config');
+const swaggerRoutes = require('./src/routes/swagger.routes');
 
 require('dotenv').config();
 
 // Create app
 const app = express();
-
-// Config swagger
-const swaggerDocs = swaggerJSDoc(swaggerConfig);
 
 // Middleware CORS & Parsing
 app.use(express.json());
@@ -52,9 +47,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// Swagger
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
 // Call routes
 require('./src/routes/authentication.routes')(app);
 require('./src/routes/user.routes')(app);
@@ -63,5 +55,8 @@ require('./src/routes/user.routes')(app);
 app.get('/', (_req, res) => {
   res.send('Ramal Kripto API');
 });
+
+// Swagger
+app.use(swaggerRoutes);
 
 module.exports = app;
