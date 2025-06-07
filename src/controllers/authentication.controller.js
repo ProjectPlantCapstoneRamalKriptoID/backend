@@ -2,15 +2,15 @@ const argon2 = require('argon2');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
-const { google } = require('googleapis');
+// const { google } = require('googleapis');
 const User = require('../models/user.model');
 const verification = require('../models/verification.model');
 // const UserPasswordReset = require('../models/userPassReset.model');
 const sendVerificationEmail = require('../services/userVerification.service');
 // const sendResetPasswordEmail = require('../services/userPassReset.service');
 
-// Register account for user
-exports.register = async (req, res) => {
+// Signup
+exports.signup = async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
@@ -58,95 +58,79 @@ exports.register = async (req, res) => {
 };
 
 // Verification email for register account
-// exports.verifyEmail = async (req, res) => {
-//   const { uniqueString } = req.params;
-//   try {
-//     // Check if verification token is valid
-//     const record = await UserVerification.findOne({});
-//     if (record) {
-//       const isMatch = await bcrypt.compare(uniqueString, record.uniqueString);
+exports.verifyEmail = async (req, res) => {
+  const { uniqueString } = req.params;
+  try {
+    // Check if verification token is valid
+    const record = await verification.findOne({});
+    if (record) {
+      const isMatch = await bcrypt.compare(uniqueString, record.uniqueString);
 
-//       // Update data
-//       if (isMatch) {
-//         await User.updateOne({ _id: record.userId }, { verified: true });
-//         await verification.deleteOne({ _id: record._id });
-//         return res.status(200).json({
-//           messages: 'Email verified successfully',
-//         });
-//       } else {
-//         return res.status(400).json({
-//           messages: 'Invalid verification link',
-//         });
-//       }
-//     } else {
-//       return res.status(400).json({
-//         messages: 'Invalid verification link',
-//       });
-//     }
-//   } catch (error) {
-//     res.status(500).json({
-//       message: 'Internal Server Error',
-//       error,
-//     });
-//   }
-// };
+      // Update data
+      if (isMatch) {
+        await User.updateOne({ _id: record.userId }, { verified: true });
+        await verification.deleteOne({ _id: record._id });
+        return res.status(200).json({
+          messages: 'Email verified successfully',
+        });
+      } else {
+        return res.status(400).json({
+          messages: 'Invalid verification link',
+        });
+      }
+    } else {
+      return res.status(400).json({
+        messages: 'Invalid verification link',
+      });
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: err,
+    });
+  }
+};
 
-// // Login
-// exports.login = async (req, res) => {
-//   const { email, password } = req.body;
-//   try {
-//     // // Check data email exists
-//     const admin = await Admin.findOne({ email });
-//     const user = !admin ? await User.findOne({ email }) : null;
-//     if (!user && !admin) {
-//       console.log(user);
-//       return res.status(400).json({ message: 'Email not found' });
-//     }
+// Signin
+exports.signin = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    // // Check data email exists
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: 'Email not found' });
+    }
 
-//     // Check if email is verified
-//     if ((user && !user.verified) || (admin && !admin.verified)) {
-//       return res.status(400).json({ message: 'Email not verified' });
-//     }
+    // Check if email is verified
+    if (user && !user.verified) {
+      return res.status(400).json({ message: 'Email not verified' });
+    }
 
-//     // Check if password is correct
-//     const match = admin
-//       ? await argon2.verify(admin.password, password)
-//       : await argon2.verify(user.password, password);
-//     if (!match) {
-//       return res.status(400).json({ message: 'Wrong password!' });
-//     }
+    // Check if password is correct
+    const match = await argon2.verify(user.password, password);
+    if (!match) {
+      return res.status(400).json({ message: 'Wrong password!' });
+    }
 
-//     // Create token
-//     const token = jwt.sign(
-//       {
-//         id: admin ? admin._id : user._id,
-//         name: admin ? admin.userName : user.fullName,
-//         email: admin ? admin.email : user.email,
-//         phone: admin ? admin.phone : user.phone,
-//         role: admin ? admin.role : user.role,
-//         roomId: admin
-//           ? admin.$ignore
-//           : user.room.length > 0
-//           ? user.room[0]._id
-//           : null,
-//       },
-//       process.env.JWT_SECRET,
-//       { expiresIn: '1d' }
-//     );
+    // Create token
+    const token = jwt.sign(
+      {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' }
+    );
 
-//     return res
-//       .header(`Authorization`, `Bearer ${token}`)
-//       .status(200)
-//       .json({
-//         message: 'Login Succesfully',
-//         token: token,
-//         role: admin ? admin.role : user.role,
-//       });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Internal Server Error', error });
-//   }
-// };
+    return res.header(`Authorization`, `Bearer ${token}`).status(200).json({
+      message: 'Login Succesfully',
+      token: token,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: 'Internal Server Error', err });
+  }
+};
 
 // // Login Google
 // const OAuth2 = google.auth.OAuth2;
