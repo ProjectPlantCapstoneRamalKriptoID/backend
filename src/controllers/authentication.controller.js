@@ -2,17 +2,18 @@ const argon2 = require('argon2');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
-// const { google } = require('googleapis');
+const { google } = require('googleapis');
 const User = require('../models/user.model');
 const verification = require('../models/verification.model');
 // const UserPasswordReset = require('../models/userPassReset.model');
 const sendVerificationEmail = require('../services/userVerification.service');
 // const sendResetPasswordEmail = require('../services/userPassReset.service');
 
+require('dotenv').config();
+
 // Signup
 exports.signup = async (req, res) => {
   const { name, email, password } = req.body;
-
   try {
     // Check if email already exists
     const user = await User.findOne({ email });
@@ -132,65 +133,66 @@ exports.signin = async (req, res) => {
   }
 };
 
-// // Login Google
-// const OAuth2 = google.auth.OAuth2;
-// const oauth2Client = new OAuth2(
-//   process.env.GOOGLE_CLIENT_ID,
-//   process.env.GOOGLE_CLIENT_SECRET,
-//   'http://localhost:8000/auth/google/callback'
-// );
+// Login Google
+const OAuth2 = google.auth.OAuth2;
+const oauth2Client = new OAuth2(
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+  process.env.GOOGLE_REDIRECT_URI
+);
 
-// exports.googleAuthRedirect = (req, res) => {
-//   // Generate auth url
-//   const authUrl = oauth2Client.generateAuthUrl({
-//     access_type: 'offline',
-//     scope: [
-//       'https://www.googleapis.com/auth/userinfo.profile',
-//       'https://www.googleapis.com/auth/userinfo.email',
-//     ],
-//     include_granted_scopes: true,
-//   });
+exports.googleAuthRedirect = (req, res) => {
+  // Generate auth url
+  const authUrl = oauth2Client.generateAuthUrl({
+    access_type: 'offline',
+    scope: [
+      'https://www.googleapis.com/auth/userinfo.profile',
+      'https://www.googleapis.com/auth/userinfo.email',
+    ],
+    include_granted_scopes: true,
+  });
 
-//   // Redirect
-//   res.redirect(authUrl);
-// };
+  // Redirect
+  res.redirect(authUrl);
+};
 
-// exports.googleAuthCallback = async (req, res) => {
-//   const { code } = req.query;
-//   try {
-//     // Get access token
-//     const { tokens } = await oauth2Client.getToken(code);
-//     oauth2Client.setCredentials(tokens);
+exports.googleAuthCallback = async (req, res) => {
+  const { code } = req.query;
+  try {
+    // Get access token
+    const { tokens } = await oauth2Client.getToken(code);
+    oauth2Client.setCredentials(tokens);
 
-//     // Get user info
-//     const userInfo = await google
-//       .oauth2({ version: 'v2', auth: oauth2Client })
-//       .userinfo.get();
+    // Get user info
+    const userInfo = await google
+      .oauth2({ version: 'v2', auth: oauth2Client })
+      .userinfo.get();
 
-//     // Save user data to database
-//     User.findOneAndUpdate(
-//       {
-//         fullName: userInfo.data.name,
-//         email: userInfo.data.email,
-//         role: 'user',
-//         verified: true,
-//       },
-//       userInfo.data,
-//       { upsert: true, new: true }
-//     )
-//       .then((user) => {
-//         console.log('User Info:', user);
-//         res.json('Authentication successful!');
-//       })
-//       .catch((error) => {
-//         console.error('Error:', error);
-//         res.status(500).json('Failed to save user data!');
-//       });
-//   } catch (error) {
-//     console.error('Error:', error);
-//     res.status(500).json('Authentication failed!');
-//   }
-// };
+    // Save user data to database
+    User.findOneAndUpdate(
+      { email: userInfo.data.email },
+      {
+        name: userInfo.data.name,
+        email: userInfo.data.email,
+        verified: true,
+      },
+      { upsert: true, new: true }
+    )
+      .then((user) => {
+        res.json({ message: 'Authentication successful!', data: user });
+      })
+      .catch((error) => {
+        res
+          .status(500)
+          .json({ message: 'Failed to save user data!', error: error.message });
+      });
+  } catch (err) {
+    console.error('Error during Google Auth callback:', err);
+    res
+      .status(500)
+      .json({ message: 'Authentication failed!', error: err.message });
+  }
+};
 
 // // Password reset
 // exports.resetPassword = async (req, res) => {
