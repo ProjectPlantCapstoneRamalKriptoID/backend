@@ -99,8 +99,34 @@ router.post('/signin', (req, res) => {
   authentication.signin(req, res);
 });
 
-// // Google Auth
+// Google Auth
+/**
+ * @swagger
+ * /auth/google:
+ *   get:
+ *     tags:
+ *       - Authentication
+ *     summary: For login with Google account
+ *     responses:
+ *       302:
+ *         description: Redirect to Google authentication page
+ */
 router.get('/google', authentication.googleAuthRedirect);
+
+// Google Auth Callback
+/**
+ * @swagger
+ * /auth/google/callback:
+ *   get:
+ *     tags:
+ *       - Authentication
+ *     summary: For Google authentication callback
+ *     responses:
+ *       200:
+ *         description: Authentication successful!
+ *       500:
+ *         description: Internal Server Error
+ */
 router.get('/google/callback', authentication.googleAuthCallback);
 
 // // Password reset
