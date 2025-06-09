@@ -100,8 +100,8 @@ router.post('/signin', (req, res) => {
 });
 
 // // Google Auth
-// router.get('/google', authentication.googleAuthRedirect);
-// router.get('/google/callback', authentication.googleAuthCallback);
+router.get('/google', authentication.googleAuthRedirect);
+router.get('/google/callback', authentication.googleAuthCallback);
 
 // // Password reset
 // router.post('/request-reset-password', authentication.resetPassword);
