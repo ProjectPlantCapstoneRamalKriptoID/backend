@@ -1,7 +1,6 @@
 const cors = require('cors');
 const path = require('path');
 const express = require('express');
-const session = require('express-session');
 const authRoutes = require('./src/routes/authentication.routes');
 const userRoutes = require('./src/routes/user.routes');
 const swaggerRoutes = require('./src/routes/swagger.routes');
@@ -17,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   cors({
-    origin: 'http://192.168.0.109/:3000, http://192.168.0.109/:9000',
+    origin: ['http://localhost:3000', 'http://192.168.0.109:3000'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: [
       'Origin',
@@ -27,19 +26,6 @@ app.use(
       'Authorization',
     ],
     credentials: true,
-  })
-);
-
-// Midelleware session
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-      maxAge: 60000, // 1 minute
-      secure: false,
-    },
   })
 );
 
