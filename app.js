@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   cors({
-    origin: 'http://localhost:3000, http://localhost:9000',
+    origin: 'http://192.168.0.109/:3000, http://192.168.0.109/:9000',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: [
       'Origin',
