@@ -22,7 +22,6 @@
     "dotenv": "^16.5.0",
     "env-encryption": "^1.11.0",
     "express": "^5.1.0",
-    "express-session": "^1.18.1",
     "googleapis": "^149.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.16.0",
