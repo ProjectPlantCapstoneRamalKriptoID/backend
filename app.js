@@ -20,7 +20,7 @@ app.use(
     origin: [
       'http://localhost:3000',
       'http://192.168.0.109:3000',
-      'ramalkriptoid.netlify.app',
+      'https://ramalkriptoid.netlify.app',
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: [
