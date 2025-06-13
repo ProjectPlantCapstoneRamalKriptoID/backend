@@ -3,6 +3,7 @@ const path = require('path');
 const express = require('express');
 const authRoutes = require('./src/routes/authentication.routes');
 const userRoutes = require('./src/routes/user.routes');
+const kriptoRoutes = require('./src/routes/kripto.routes');
 const swaggerRoutes = require('./src/routes/swagger.routes');
 
 require('dotenv').config();
@@ -16,7 +17,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   cors({
-    origin: ['http://localhost:3000', 'http://192.168.0.109:3000'],
+    origin: [
+      'http://localhost:3000',
+      'http://192.168.0.109:3000',
+      'https://ramalkriptoid.netlify.app',
+    ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: [
       'Origin',
@@ -43,6 +48,7 @@ app.get('/', (_req, res) => {
 // Call routes
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
+app.use('/kripto', kriptoRoutes);
 
 // Swagger
 app.use(swaggerRoutes);
